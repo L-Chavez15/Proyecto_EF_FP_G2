@@ -5,7 +5,7 @@ namespace Proyecto_EF_FP_G2
 {
     public partial class Form1 : Form
     {
-
+        //falta terminar el código
         public List<Clientes> listaClientes = new List<Clientes>();
         public List<Productos> listaProductos = new List<Productos>();
         public Form1()
@@ -117,5 +117,6 @@ namespace Proyecto_EF_FP_G2
             Form3 registrarProducto = new Form3();
             registrarProducto.Show();
         }
+
     }
 }
