@@ -92,18 +92,6 @@ namespace Proyecto_EF_FP_G2
                     fs.Seek(posicion, SeekOrigin.Begin);
 
                     // Leer el registro completo en un buffer
-                    /*byte[] buffer = br.ReadBytes(tamañoRegistro);
-                    string registro = Encoding.ASCII.GetString(buffer);
-
-                    // Extraer los campos según sus posiciones
-                    Productos prod = new Productos();
-                    prod.Codigo = int.Parse(registro.Substring(0, 4).Trim());
-                    prod.Nombre = registro.Substring(4, 30).Trim();
-                    prod.Categoria = registro.Substring(34, 20).Trim();
-                    prod.Precio = double.Parse(registro.Substring(54, 8).Trim());
-                    prod.Stock = int.Parse(registro.Substring(62, 8).Trim());
-
-                    return prod;*/
                     Productos prod = new Productos();
                     prod.Codigo = br.ReadInt32();
                     prod.Nombre = br.ReadString().Trim();
