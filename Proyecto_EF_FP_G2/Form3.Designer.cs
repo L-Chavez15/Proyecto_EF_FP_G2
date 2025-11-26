@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            label1 = new Label();
             label2 = new Label();
             btnRegistrarProductos = new Button();
             txtStock = new TextBox();
@@ -45,6 +46,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(btnRegistrarProductos);
             groupBox1.Controls.Add(txtStock);
@@ -56,11 +58,21 @@
             groupBox1.Controls.Add(label10);
             groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(label7);
-            groupBox1.Location = new Point(12, 12);
+            groupBox1.Location = new Point(12, 9);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(315, 305);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
+            groupBox1.Enter += groupBox1_Enter;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(20, 223);
+            label1.Name = "label1";
+            label1.Size = new Size(36, 15);
+            label1.TabIndex = 29;
+            label1.Text = "Stock";
             // 
             // label2
             // 
@@ -164,6 +176,7 @@
             ClientSize = new Size(337, 326);
             Controls.Add(groupBox1);
             Name = "Form3";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Form3";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -184,5 +197,6 @@
         private Label label8;
         private Label label7;
         private Label label2;
+        private Label label1;
     }
 }

@@ -44,7 +44,9 @@
             Column8 = new DataGridViewTextBoxColumn();
             Column9 = new DataGridViewTextBoxColumn();
             groupBox1 = new GroupBox();
+            label1 = new Label();
             groupBox2 = new GroupBox();
+            label2 = new Label();
             btnMostrar = new Button();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvListadoClientes).BeginInit();
@@ -165,6 +167,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(dgvListadoClientes);
             groupBox1.Location = new Point(12, 40);
             groupBox1.Name = "groupBox1";
@@ -173,8 +176,19 @@
             groupBox1.TabStop = false;
             groupBox1.Enter += groupBox1_Enter;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(187, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(201, 30);
+            label1.TabIndex = 2;
+            label1.Text = "LISTA DE CLIENTES";
+            // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(label2);
             groupBox2.Controls.Add(dgvListadoProductos);
             groupBox2.Location = new Point(604, 40);
             groupBox2.Name = "groupBox2";
@@ -182,21 +196,34 @@
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(221, 19);
+            label2.Name = "label2";
+            label2.Size = new Size(232, 30);
+            label2.TabIndex = 3;
+            label2.Text = "LISTA DE PRODUCTOS";
+            label2.Click += label2_Click;
+            // 
             // btnMostrar
             // 
-            btnMostrar.Location = new Point(565, 432);
+            btnMostrar.BackColor = SystemColors.ActiveCaption;
+            btnMostrar.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnMostrar.Location = new Point(604, 416);
             btnMostrar.Name = "btnMostrar";
-            btnMostrar.Size = new Size(75, 23);
+            btnMostrar.Size = new Size(91, 36);
             btnMostrar.TabIndex = 5;
-            btnMostrar.Text = "mostrar";
-            btnMostrar.UseVisualStyleBackColor = true;
+            btnMostrar.Text = "Mostrar";
+            btnMostrar.UseVisualStyleBackColor = false;
             btnMostrar.Click += btnMostrar_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1287, 480);
+            ClientSize = new Size(1287, 460);
             Controls.Add(btnMostrar);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -209,7 +236,9 @@
             ((System.ComponentModel.ISupportInitialize)dgvListadoClientes).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvListadoProductos).EndInit();
             groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -233,5 +262,7 @@
         private GroupBox groupBox2;
         private DataGridViewTextBoxColumn Column9;
         private Button btnMostrar;
+        private Label label1;
+        private Label label2;
     }
 }

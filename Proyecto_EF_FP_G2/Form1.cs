@@ -31,78 +31,61 @@ namespace Proyecto_EF_FP_G2
 
         public void ListarClientes()
         {
-            string ruta = "cliente.txt";
-
+            string G2_ruta = "cliente.txt";
+            listaClientes.Clear();
             // 1. Verificar si el archivo existe 
-            if (!File.Exists(ruta)) return; // Si no existe, se sale y no hace nada
+            if (!File.Exists(G2_ruta)) return; // Si no existe, se sale y no hace nada
             dgvListadoClientes.DataSource = null;
             dgvListadoClientes.Rows.Clear();
             try
             {
-                using (StreamReader sr = new StreamReader(ruta))
+                using (StreamReader sr = new StreamReader(G2_ruta))
                 {
-                    string linea;
-                    while ((linea = sr.ReadLine()) != null)
+                    string G2_linea;
+                    while ((G2_linea = sr.ReadLine()) != null)
                     {
-                        string[] array = linea.Split(',');
-                        if (array.Length >= 4)
-                        {
-                            dgvListadoClientes.Rows.Add(array[0], array[1], array[2], array[3]);
-                        }
+                        string[] g2_array = G2_linea.Split(',');
+                        DataGridView G2_Item = new DataGridView();
+                        G2_Item.Columns.Add("Nombres", "Nombres");
+                        G2_Item.Columns.Add("Apellidos", "Apellidos");
+                        G2_Item.Columns.Add("DNI", "DNI");
+                        G2_Item.Columns.Add("Celular", "Celular");
+                        dgvListadoClientes.Rows.Add(g2_array[0], g2_array[1], g2_array[2], g2_array[3]);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al leer: " + ex.Message);
+                MessageBox.Show("Error al Mostrar Clientes: " + ex.Message);
             }
         }
         public void ListarProductos()
         {
-            string rutaP = "producto.txt";
-            // EL TAMAÑO TOTAL DEBE SER LA SUMA DE LOS CAMPOS (10+30+20+10+10 = 80)
-            int tamañoRegistro = 80;
-
-            if (!File.Exists(rutaP)) return;
-
+            string G2_rutaP = "producto.txt";
+            listaProductos.Clear();
+            // 1. Verificar si el archivo existe 
+            if (!File.Exists(G2_rutaP)) return; // Si no existe, se sale y no hace nada
+            dgvListadoProductos.DataSource = null;
             dgvListadoProductos.Rows.Clear();
-
             try
             {
-                using (FileStream fs = new FileStream(rutaP, FileMode.Open, FileAccess.Read))
-                using (BinaryReader reader = new BinaryReader(fs))
+                using (FileStream fs = new FileStream(G2_rutaP, FileMode.Open, FileAccess.Read))
+                using (BinaryReader br = new BinaryReader(fs))
                 {
-                    // Calculamos cuántos registros hay
-                    long cantidad = fs.Length / tamañoRegistro;
-
-                    for (int i = 0; i < cantidad; i++)
+                    while (fs.Position < fs.Length)
                     {
-                        // 1. Mover el puntero (Igual a tu imagen)
-                        long posicion = i * tamañoRegistro;
-                        fs.Seek(posicion, SeekOrigin.Begin);
-
-                        // 2. Leer el registro completo en un buffer
-                        byte[] buffer = reader.ReadBytes(tamañoRegistro);
-
-                        // 3. Convertir todo a un solo String
-                        string registro = Encoding.ASCII.GetString(buffer);
-
-                        // 4. Extraer los campos con Substring (Cortar el texto)
-                        // Cuidado con los índices: empiezan donde termina el anterior
-                        string codigo = registro.Substring(0, 10).Trim();   // De 0 a 10
-                        string nombre = registro.Substring(10, 30).Trim();  // De 10, toma 30 caracteres
-                        string cat = registro.Substring(40, 20).Trim();     // 10+30 = 40. Desde 40, toma 20.
-                        string precio = registro.Substring(60, 10).Trim();  // 40+20 = 60. Desde 60, toma 10.
-                        string stock = registro.Substring(70, 10).Trim();   // 60+10 = 70. Desde 70, toma 10.
-
-                        // 5. Agregar al DataGridView
-                        dgvListadoProductos.Rows.Add(codigo, nombre, cat, precio, stock);
+                        double codigo = br.ReadDouble();
+                        string nombre = br.ReadString();
+                        string categoria = br.ReadString();
+                        double precio = br.ReadDouble();
+                        int stock = br.ReadInt32();
+                        dgvListadoProductos.Rows.Add(codigo, nombre, categoria, precio, stock);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al leer: " + ex.Message);
+                MessageBox.Show("Error al Mostrar Productos: " + ex.Message);
             }
         }
 
@@ -118,5 +101,9 @@ namespace Proyecto_EF_FP_G2
             registrarProducto.Show();
         }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

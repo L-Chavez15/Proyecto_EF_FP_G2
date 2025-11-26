@@ -15,7 +15,7 @@ namespace Proyecto_EF_FP_G2
     {
         public List<Productos> listaProductos = new List<Productos>();
         //private const int TAM_REGISTRO = 42;
-        private string rutaP = "producto.txt";
+        private string G2_rutaP = "producto.txt";
         public Form3()
         {
             InitializeComponent();
@@ -23,15 +23,14 @@ namespace Proyecto_EF_FP_G2
 
         private void btnRegistrarProductos_Click(object sender, EventArgs e)
         {
-            
-            Guardar(new Productos
-            {
-                Codigo = int.Parse(txtCodigo.Text),
-                Nombre = txtNombreP.Text,
-                Categoria = cbbCategoria.SelectedItem.ToString(),
-                Precio = double.Parse(txtPrecio.Text),
-                Stock = int.Parse(txtStock.Text)
-            });
+
+            Productos G2_nuevo = new Productos();
+            G2_nuevo.Codigo = int.Parse(txtCodigo.Text);
+            G2_nuevo.Nombre = txtNombreP.Text;
+            G2_nuevo.Categoria = cbbCategoria.SelectedItem.ToString();
+            G2_nuevo.Precio = double.Parse(txtPrecio.Text);
+            G2_nuevo.Stock = int.Parse(txtStock.Text);
+            Guardar(G2_nuevo);
             Limpiar();
         }
         public void Limpiar()
@@ -44,73 +43,91 @@ namespace Proyecto_EF_FP_G2
         }
         public void Guardar(Productos prod)
         {
-            string rutaP = "producto.txt";
 
-            // DEFINIMOS LOS TAMAÑOS (Igual que haremos en la lectura)
+            // DEFINIMOS LOS TAMAÑOS 
             // Total = 10 + 30 + 20 + 10 + 10 = 80 bytes
-            int tamCodigo = 10;
-            int tamNombre = 30;
-            int tamCat = 20;
-            int tamPrecio = 10;
-            int tamStock = 10;
+            //int G2_tamCodigo = 10;
+            //int G2_tamNombre = 30;
+            //int G2_tamCat = 20;
+            //int G2_tamPrecio = 10;
+            //int G2_tamStock = 10;
 
             try
             {
-                using (FileStream fs = new FileStream(rutaP, FileMode.Append, FileAccess.Write))
+                using (FileStream fs = new FileStream(G2_rutaP, FileMode.Append, FileAccess.Write))
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {
-                    // Construimos una sola cadena larga concatenando todo
-                    string registro = "";
-
-                    // 1. Código (Convertir a string, rellenar a la derecha, cortar si sobra)
-                    registro += prod.Codigo.ToString().PadRight(tamCodigo).Substring(0, tamCodigo);
-
-                    // 2. Nombre
-                    registro += prod.Nombre.PadRight(tamNombre).Substring(0, tamNombre);
-
-                    // 3. Categoría
-                    registro += prod.Categoria.PadRight(tamCat).Substring(0, tamCat);
-
-                    // 4. Precio
-                    registro += prod.Precio.ToString().PadRight(tamPrecio).Substring(0, tamPrecio);
-
-                    // 5. Stock
-                    registro += prod.Stock.ToString().PadRight(tamStock).Substring(0, tamStock);
-
-                    // ESCRIBIMOS LA CADENA CONVERTIDA A BYTES
-                    byte[] buffer = Encoding.ASCII.GetBytes(registro);
-                    bw.Write(buffer);
+                    bw.Write(prod.Codigo);                                         // 4 bytes (int)
+                    bw.Write(prod.Nombre.PadRight(30).Substring(0, 30));          // 30 bytes (string)
+                    bw.Write(prod.Categoria.PadRight(20).Substring(0, 20));       // 20 bytes (string)
+                    bw.Write(prod.Precio);                                         // 8 bytes (double)
+                    bw.Write(prod.Stock);
                 }
-                MessageBox.Show("Producto guardado correctamente.");
+                MessageBox.Show("Producto registrado correctamente.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar: " + ex.Message);
             }
         }
-        //public Productos Leer(int numeroRegistro)
-        //{
-        //    const int TAMAÑO_REGISTRO = 42; // 4 + 30 + 8
+        public Productos Leer(int numeroRegistro)
+        {
+            const int tamañoRegistro = 80;
 
-        //    using (FileStream fs = new FileStream(rutaP, FileMode.Open))
-        //    using (BinaryReader br = new BinaryReader(fs))
-        //    {
-        //        // Calcular posición exacta
-        //        long posicion = numeroRegistro * TAMAÑO_REGISTRO;
+            try
+            {
+                using (FileStream fs = new FileStream(G2_rutaP, FileMode.Open, FileAccess.Read))
+                using (BinaryReader br = new BinaryReader(fs))
+                {
+                    // Calcular posición exacta del registro
+                    long posicion = numeroRegistro * tamañoRegistro;
 
-        //        // Mover el puntero
-        //        fs.Seek(posicion, SeekOrigin.Begin);
+                    if (posicion >= fs.Length)
+                    {
+                        MessageBox.Show("El registro no existe.");
+                        return null;
+                    }
 
-        //        // Leer datos
-        //        Productos est = new Productos();
-        //        est.Codigo = br.ReadInt32();
-        //        est.Nombre = br.ReadString().Trim();
-        //        est.Categoria = br.ReadString().Trim();
-        //        est.Precio = br.ReadDouble();
-        //        est.Stock = br.ReadInt32();
+                    // Mover el puntero
+                    fs.Seek(posicion, SeekOrigin.Begin);
 
-        //        return est;
-        //    }
-        //}
+                    // Leer el registro completo en un buffer
+                    /*byte[] buffer = br.ReadBytes(tamañoRegistro);
+                    string registro = Encoding.ASCII.GetString(buffer);
+
+                    // Extraer los campos según sus posiciones
+                    Productos prod = new Productos();
+                    prod.Codigo = int.Parse(registro.Substring(0, 4).Trim());
+                    prod.Nombre = registro.Substring(4, 30).Trim();
+                    prod.Categoria = registro.Substring(34, 20).Trim();
+                    prod.Precio = double.Parse(registro.Substring(54, 8).Trim());
+                    prod.Stock = int.Parse(registro.Substring(62, 8).Trim());
+
+                    return prod;*/
+                    Productos prod = new Productos();
+                    prod.Codigo = br.ReadInt32();
+                    prod.Nombre = br.ReadString().Trim();
+                    prod.Categoria = br.ReadString().Trim();
+                    prod.Precio = br.ReadDouble();
+                    prod.Stock = br.ReadInt32();
+                    return prod;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("El archivo no existe.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al leer el registro: {ex.Message}");
+                return null;
+            }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
