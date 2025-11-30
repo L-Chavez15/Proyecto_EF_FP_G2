@@ -23,7 +23,6 @@ namespace Proyecto_EF_FP_G2
 
         private void btnRegistrarProductos_Click(object sender, EventArgs e)
         {
-
             Productos G2_nuevo = new Productos();
             G2_nuevo.Codigo = int.Parse(txtCodigo.Text);
             G2_nuevo.Nombre = txtNombreP.Text;
@@ -43,17 +42,13 @@ namespace Proyecto_EF_FP_G2
         }
         public void Guardar(Productos prod)
         {
-
-            // DEFINIMOS LOS TAMAÑOS 
-            // Total = 10 + 30 + 20 + 10 + 10 = 80 bytes
-            //int G2_tamCodigo = 10;
-            //int G2_tamNombre = 30;
-            //int G2_tamCat = 20;
-            //int G2_tamPrecio = 10;
-            //int G2_tamStock = 10;
-
             try
             {
+                if (!ValidarDatos(txtNombreP.Text, 0))
+                {
+                    MessageBox.Show("El Nombre del Producto no debe contener números ni estar vacío.", "Error");
+                    return;
+                }
                 using (FileStream fs = new FileStream(G2_rutaP, FileMode.Append, FileAccess.Write))
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {
@@ -72,7 +67,7 @@ namespace Proyecto_EF_FP_G2
         }
         public Productos Leer(int numeroRegistro)
         {
-            const int tamañoRegistro = 80;
+            const int G2_tamañoRegistro = 6+30+20+8+4;//66bytes
 
             try
             {
@@ -80,7 +75,7 @@ namespace Proyecto_EF_FP_G2
                 using (BinaryReader br = new BinaryReader(fs))
                 {
                     // Calcular posición exacta del registro
-                    long posicion = numeroRegistro * tamañoRegistro;
+                    long posicion = numeroRegistro * G2_tamañoRegistro;
 
                     if (posicion >= fs.Length)
                     {
@@ -111,6 +106,13 @@ namespace Proyecto_EF_FP_G2
                 MessageBox.Show($"Error al leer el registro: {ex.Message}");
                 return null;
             }
+        }
+        private bool ValidarDatos(string texto, int indice)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return false;
+            if (indice == texto.Length) return true;
+            if (char.IsDigit(texto[indice])) return false;
+            return ValidarDatos(texto, indice + 1);
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)

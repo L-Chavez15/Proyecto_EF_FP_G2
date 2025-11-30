@@ -45,12 +45,14 @@ namespace Proyecto_EF_FP_G2
                     while ((G2_linea = sr.ReadLine()) != null)
                     {
                         string[] g2_array = G2_linea.Split(',');
-                        DataGridView G2_Item = new DataGridView();
-                        G2_Item.Columns.Add("Nombres", "Nombres");
-                        G2_Item.Columns.Add("Apellidos", "Apellidos");
-                        G2_Item.Columns.Add("DNI", "DNI");
-                        G2_Item.Columns.Add("Celular", "Celular");
-                        dgvListadoClientes.Rows.Add(g2_array[0], g2_array[1], g2_array[2], g2_array[3]);
+                        if (g2_array.Length == 4)
+                        {
+                            string nombres = g2_array[0];
+                            string apellidos = g2_array[1];
+                            string dni = g2_array[2];
+                            string telefono = g2_array[3];
+                            dgvListadoClientes.Rows.Add(nombres, apellidos, dni, telefono);
+                        }
                     }
                 }
             }
